@@ -1,9 +1,9 @@
 import React from 'react';
 
 const STATS = [
-  { value: '+20M', label: 'En publicity mensual' },
+  { value: '+$2M', label: 'En ahorro de publicity mensual' },
   { value: '+35', label: 'Clientes impactados' },
-  { value: '20+', label: 'Años de experiencia' },
+  { value: '+20', label: 'Años de experiencia' },
   { value: '+95', label: 'Voceros entrenados' },
 ];
 
