@@ -1,0 +1,6 @@
+{
+  "name": "Mejora Comunicaciones",
+  "description": "Agencia élite de comunicación de marca, relaciones públicas y gestión de reputación estratégica.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
