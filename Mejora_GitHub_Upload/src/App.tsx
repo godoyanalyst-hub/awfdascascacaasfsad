@@ -84,7 +84,7 @@ export default function App() {
   }, [mobileMenuOpen]);
 
   return (
-    <div className="min-h-screen bg-brand-cream text-brand-slate-dark flex flex-col font-sans antialiased overflow-x-hidden">
+    <div className="min-h-screen w-full max-w-[100vw] bg-brand-cream text-brand-slate-dark flex flex-col font-sans antialiased overflow-x-hidden">
       
       {/* 1. STICKY TOP NAVIGATION BAR */}
       <nav className="fixed w-full bg-brand-cream/90 backdrop-blur-md z-40 border-b border-brand-cream-dark transition-all duration-300 py-4" id="main-nav">
@@ -389,7 +389,7 @@ export default function App() {
       </section>
 
       {/* 5. INTERACTIVE CASE STUDIES & METRICS (CASOS DE ÉXITO) */}
-      <section className="pt-10 pb-24 px-6 max-w-7xl mx-auto" id="casos">
+      <section className="pt-10 pb-24 px-4 md:px-6 w-full max-w-[100vw] lg:max-w-7xl mx-auto overflow-hidden box-border" id="casos">
         
         {/* Cases Header */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-end mb-16">
@@ -397,7 +397,7 @@ export default function App() {
             <span className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-teal mb-4 block">
               Evidencia & Archivo de Casos
             </span>
-            <h2 className="font-heading text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-brand-slate-dark leading-[1.1]">
+            <h2 className="font-heading text-3xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-brand-slate-dark leading-[1.1] break-words">
               Garantía <span className="text-brand-teal italic font-medium">Respaldada</span> por Resultados
             </h2>
           </div>

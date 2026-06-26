@@ -54,7 +54,7 @@ export default function InteractivePortfolio() {
             // Special Last Card
             if ('isSpecial' in item) {
               return (
-                <div key={item.id} className="w-full flex-shrink-0 flex items-center justify-center p-12 md:p-24 bg-brand-cream/50">
+                <div key={item.id} className="w-full flex-shrink-0 flex items-center justify-center p-6 md:p-12 lg:p-24 bg-brand-cream/50">
                   <div className="text-center group cursor-default">
                     <h4 className="font-heading text-6xl md:text-8xl font-black text-brand-slate-dark mb-4 tracking-tighter group-hover:scale-105 transition-transform duration-500">
                       +100
@@ -76,10 +76,10 @@ export default function InteractivePortfolio() {
               <div 
                 key={cs.id}
                 onClick={() => setActiveCase(cs)}
-                className="w-full flex-shrink-0 flex flex-col lg:flex-row cursor-pointer group"
+                className="w-full flex-shrink-0 flex flex-col lg:flex-row cursor-pointer group min-w-0"
               >
                 {/* Left Side: Context & Title */}
-                <div className="flex-1 p-10 md:p-16 lg:p-20 flex flex-col justify-center relative bg-white">
+                <div className="flex-1 min-w-0 p-6 md:p-16 lg:p-20 flex flex-col justify-center relative bg-white">
                   <div className="relative z-10">
                     <div className="flex items-center gap-4 mb-8">
                       <span className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-teal bg-brand-teal-surface px-4 py-2 rounded-full border border-brand-teal/20">
@@ -116,7 +116,7 @@ export default function InteractivePortfolio() {
                 </div>
 
                 {/* Right Side: Monumental Result */}
-                <div className="w-full lg:w-[45%] bg-brand-cream border-t lg:border-t-0 lg:border-l border-slate-100 flex flex-col justify-center p-10 md:p-16 lg:p-20 relative overflow-hidden group-hover:bg-brand-teal-surface/30 transition-colors duration-700">
+                <div className="w-full lg:w-[45%] bg-brand-cream border-t lg:border-t-0 lg:border-l border-slate-100 flex flex-col justify-center p-6 md:p-16 lg:p-20 relative overflow-hidden group-hover:bg-brand-teal-surface/30 transition-colors duration-700">
                   <div className="relative z-10">
                     <p className="text-[10px] md:text-xs font-black uppercase tracking-[0.2em] text-brand-teal mb-4 flex items-center gap-3">
                       <span className="w-8 h-[2px] bg-brand-teal inline-block"></span>
