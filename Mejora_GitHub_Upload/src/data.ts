@@ -120,10 +120,10 @@ export const CASE_STUDIES: CaseStudy[] = [
     description: 'Coordinación y prensa de Encuentro Smart, evento de educación en inversión inmobiliaria más importante del país.',
     challenge: 'Construir autoridad y liderazgo de opinión para marca y su CEO, como uno de los gestores de inversión inmobiliaria más relevantes en Chile, a través de una estrategia global de PR & Earned Media, colaborando en el desarrollo de podcast y evento Encuentro Inmobiliario, articulando y vinculando a líderes del sector y media partners.',
     solution: 'Plan de free publicity y gestión de entrevistas en medios nacionales. Vínculo con referentes legales, inmobiliarios, del mundo de la arquitectura, academia, diseño e inversiones, que se sumaron a la iniciativa., amplificando alcance y reputación de marca.',
-    result: 'Resultado: Más de $25 millones ahorrados en free publicity, con presencia en vitrinas tier 1, 2 y 3, con más de 10 rostros claves y repercusiones como embajadores espontáneos de marca en LinkedIN e IG.',
+    result: 'Resultado: Más de $2 millones ahorrados en free publicity, con presencia en vitrinas tier 1, 2 y 3, con más de 10 rostros claves y repercusiones como embajadores espontáneos de marca en LinkedIN e IG.',
     stats: {
       label: 'Impacto Comprobado',
-      value: '+$25 Millones'
+      value: '+$2 Millones'
     }
   },
   {

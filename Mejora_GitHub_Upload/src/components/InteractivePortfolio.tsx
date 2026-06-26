@@ -26,20 +26,23 @@ export default function InteractivePortfolio() {
   return (
     <div id="archivo-casos" className="relative w-full max-w-6xl mx-auto mt-12 mb-24">
       {/* Navigation Controls (Top Right) */}
-      <div className="flex justify-end gap-3 mb-6 pr-2">
+      <div className="flex justify-end gap-4 mb-8 pr-2">
         <button 
           onClick={prevSlide}
-          className="w-12 h-12 rounded-full border border-slate-200 flex items-center justify-center text-slate-400 hover:text-brand-teal hover:border-brand-teal hover:bg-brand-teal-surface transition-all duration-300"
+          className="group relative w-14 h-14 rounded-full bg-white border border-slate-200 shadow-[0_8px_30px_rgba(0,0,0,0.08)] flex items-center justify-center text-brand-slate-dark hover:text-white hover:bg-brand-teal hover:border-brand-teal hover:shadow-[0_10px_40px_rgba(16,163,151,0.4)] transition-all duration-300 hover:-translate-y-1 active:translate-y-0 active:scale-95"
           aria-label="Anterior caso"
         >
-          <ChevronLeft size={24} strokeWidth={1.5} />
+          <ChevronLeft size={26} strokeWidth={2.5} className="transition-transform duration-300 group-hover:-translate-x-1" />
         </button>
         <button 
           onClick={nextSlide}
-          className="w-12 h-12 rounded-full border border-slate-200 flex items-center justify-center text-slate-400 hover:text-brand-teal hover:border-brand-teal hover:bg-brand-teal-surface transition-all duration-300"
+          className="group relative w-14 h-14 rounded-full bg-white border border-slate-200 shadow-[0_8px_30px_rgba(0,0,0,0.08)] flex items-center justify-center text-brand-slate-dark hover:text-white hover:bg-brand-teal hover:border-brand-teal hover:shadow-[0_10px_40px_rgba(16,163,151,0.4)] transition-all duration-300 hover:-translate-y-1 active:translate-y-0 active:scale-95"
           aria-label="Siguiente caso"
         >
-          <ChevronRight size={24} strokeWidth={1.5} />
+          <ChevronRight size={26} strokeWidth={2.5} className="transition-transform duration-300 group-hover:translate-x-1" />
+          
+          {/* Subtle pulse ring to draw attention */}
+          <span className="absolute inset-0 rounded-full border-2 border-brand-teal opacity-30 animate-[ping_3s_ease-in-out_infinite] pointer-events-none group-hover:hidden"></span>
         </button>
       </div>
 
