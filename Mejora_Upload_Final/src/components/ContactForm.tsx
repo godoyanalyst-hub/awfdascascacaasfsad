@@ -45,54 +45,10 @@ export default function ContactForm() {
       newErrors.email = 'Formato de correo electrónico inválido.';
     }
     if (!formData.message.trim()) newErrors.message = 'Por favor, describe brevemente tu requerimiento.';
-    setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (validate()) {
-      setIsSubmitting(true);
-      setSubmitError(false);
-      
-      try {
-        const response = await fetch("https://formsubmit.co/ajax/paulina.mejoracomunicaciones@gmail.com", {
-          method: "POST",
-          headers: { 
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          },
-          body: JSON.stringify({
-            Nombre: formData.name,
-            Empresa: formData.company || 'No especificada',
-            Email: formData.email,
-            Servicio_Interes: selectedServiceLabel,
-            Mensaje: formData.message,
-            _subject: `Nuevo mensaje de ${formData.name} - Mejora Comunicaciones`,
-            _template: "table"
-          })
-        });
-
-        if (response.ok) {
-          setSuccess(true);
-          setFormData({
-            name: '',
-            company: '',
-            email: '',
-            service: 'pr-prensa',
-            message: ''
-          });
-          setTimeout(() => setSuccess(false), 8000);
-        } else {
-          setSubmitError(true);
-        }
-      } catch (error) {
-        setSubmitError(true);
-      } finally {
-        setIsSubmitting(false);
-      }
-    }
-  };
+  // Eliminado handleSubmit AJAX para usar envío nativo HTML que soporta correctamente el proceso de activación de FormSubmit.
 
   return (
     <div className="w-full max-w-6xl mx-auto" id="contacto-seccion">
@@ -166,16 +122,22 @@ export default function ContactForm() {
               </div>
             ) : null}
 
-            <form onSubmit={handleSubmit} className="space-y-10 relative z-10">
+            <form action="https://formsubmit.co/paulina.mejoracomunicaciones@gmail.com" method="POST" className="space-y-10 relative z-10">
+              {/* Configuraciones de FormSubmit */}
+              <input type="hidden" name="_subject" value="Nuevo mensaje - Mejora Comunicaciones" />
+              <input type="hidden" name="_template" value="table" />
+              <input type="hidden" name="_next" value="https://mejora-comunicaciones.vercel.app/" />
+              <input type="hidden" name="_captcha" value="true" />
+              
               <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                 <div className="relative group pt-5">
                   <input
                     type="text"
                     id="name"
+                    name="Nombre"
                     placeholder=" "
+                    required
                     className="block w-full bg-transparent border-0 border-b-2 border-slate-700/50 py-3 px-0 text-base text-white focus:outline-none focus:ring-0 focus:border-brand-teal transition-colors peer"
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   />
                   <label htmlFor="name" className="absolute text-xs uppercase tracking-[0.15em] font-bold text-slate-500 duration-300 transform -translate-y-7 top-7 -z-10 origin-[0] peer-focus:text-brand-teal peer-placeholder-shown:translate-y-0 peer-placeholder-shown:text-sm peer-focus:-translate-y-7 peer-focus:text-xs">
                     Tu Nombre Completo
@@ -187,10 +149,9 @@ export default function ContactForm() {
                   <input
                     type="text"
                     id="company"
+                    name="Empresa"
                     placeholder=" "
                     className="block w-full bg-transparent border-0 border-b-2 border-slate-700/50 py-3 px-0 text-base text-white focus:outline-none focus:ring-0 focus:border-brand-teal transition-colors peer"
-                    value={formData.company}
-                    onChange={(e) => setFormData({ ...formData, company: e.target.value })}
                   />
                   <label htmlFor="company" className="absolute text-xs uppercase tracking-[0.15em] font-bold text-slate-500 duration-300 transform -translate-y-7 top-7 -z-10 origin-[0] peer-focus:text-brand-teal peer-placeholder-shown:translate-y-0 peer-placeholder-shown:text-sm peer-focus:-translate-y-7 peer-focus:text-xs">
                     Empresa <span className="font-normal opacity-50">(Opcional)</span>
@@ -202,10 +163,10 @@ export default function ContactForm() {
                 <input
                   type="email"
                   id="email"
+                  name="Email"
                   placeholder=" "
+                  required
                   className="block w-full bg-transparent border-0 border-b-2 border-slate-700/50 py-3 px-0 text-base text-white focus:outline-none focus:ring-0 focus:border-brand-teal transition-colors peer"
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 />
                 <label htmlFor="email" className="absolute text-xs uppercase tracking-[0.15em] font-bold text-slate-500 duration-300 transform -translate-y-7 top-7 -z-10 origin-[0] peer-focus:text-brand-teal peer-placeholder-shown:translate-y-0 peer-placeholder-shown:text-sm peer-focus:-translate-y-7 peer-focus:text-xs">
                   Correo Electrónico
@@ -216,6 +177,7 @@ export default function ContactForm() {
               <div className="relative group pt-5">
                 <label className="block text-xs uppercase tracking-[0.15em] font-bold text-slate-500 mb-2">Área de Interés Principal</label>
                 <div className="relative">
+                  <input type="hidden" name="Servicio_de_Interés" value={selectedServiceLabel} />
                   <div 
                     className="w-full bg-transparent border-0 border-b-2 border-slate-700/50 py-3 px-0 text-base text-white cursor-pointer flex justify-between items-center group-hover:border-brand-teal transition-colors"
                     onClick={() => setDropdownOpen(!isDropdownOpen)}
@@ -245,11 +207,11 @@ export default function ContactForm() {
               <div className="relative group pt-5">
                 <textarea
                   id="message"
+                  name="Mensaje"
                   rows={3}
                   placeholder=" "
+                  required
                   className="block w-full bg-transparent border-0 border-b-2 border-slate-700/50 py-3 px-0 text-base text-white focus:outline-none focus:ring-0 focus:border-brand-teal transition-colors peer resize-none"
-                  value={formData.message}
-                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                 />
                 <label htmlFor="message" className="absolute text-xs uppercase tracking-[0.15em] font-bold text-slate-500 duration-300 transform -translate-y-7 top-7 -z-10 origin-[0] peer-focus:text-brand-teal peer-placeholder-shown:translate-y-0 peer-placeholder-shown:text-sm peer-focus:-translate-y-7 peer-focus:text-xs">
                   Describe tu proyecto o requerimiento actual...
@@ -260,11 +222,10 @@ export default function ContactForm() {
               <div className="pt-6">
                 <button
                   type="submit"
-                  disabled={isSubmitting}
-                  className={`w-full bg-brand-teal hover:bg-brand-teal-light text-slate-900 font-extrabold text-[11px] uppercase tracking-[0.2em] py-5 rounded-full transition-all duration-300 shadow-[0_0_30px_rgba(16,163,151,0.2)] hover:shadow-[0_0_40px_rgba(16,163,151,0.4)] flex items-center justify-center gap-3 ${isSubmitting ? 'opacity-70 cursor-not-allowed' : ''}`}
+                  className="w-full bg-brand-teal hover:bg-brand-teal-light text-slate-900 font-extrabold text-[11px] uppercase tracking-[0.2em] py-5 rounded-full transition-all duration-300 shadow-[0_0_30px_rgba(16,163,151,0.2)] hover:shadow-[0_0_40px_rgba(16,163,151,0.4)] flex items-center justify-center gap-3"
                 >
-                  {isSubmitting ? 'Enviando...' : 'Solicitar Evaluación Estratégica'}
-                  {!isSubmitting && <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>}
+                  Solicitar Evaluación Estratégica
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
                 </button>
               </div>
             </form>
