@@ -5,83 +5,121 @@ export default function ContactForm() {
     name: '',
     company: '',
     email: '',
-    service: 'pr-prensa',
     message: ''
   });
   const [copied, setCopied] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [success, setSuccess] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState(false);
   const [isDropdownOpen, setDropdownOpen] = useState(false);
 
   const serviceOptions = [
-    { value: 'pr-prensa', label: 'Gestión de prensa & Relaciones Públicas' },
-    { value: 'estrategia-digital', label: 'Generación de contenido SEO, GEO e IA' },
-    { value: 'crisis', label: 'Gestión de Crisis, Reputación y Control de Daños' },
-    { value: 'media-training', label: 'Media Training Ejecutivo y Entrenamiento de Vocerías' },
-    { value: 'otros', label: 'Otra consulta / Asesoría General' }
+    { value: 'Gestión de prensa & Relaciones Públicas', label: 'Gestión de prensa & Relaciones Públicas' },
+    { value: 'Media Training & Vocería', label: 'Media Training & Vocería' },
+    { value: 'Estrategia Digital', label: 'Estrategia Digital' },
+    { value: 'Manejo de Crisis', label: 'Manejo de Crisis' },
+    { value: 'Marketing de Influencia', label: 'Marketing de Influencia' }
   ];
+  const [selectedServiceLabel, setSelectedServiceLabel] = useState(serviceOptions[0].label);
 
-  const selectedServiceLabel = serviceOptions.find(opt => opt.value === formData.service)?.label;
-
-  const handleSelectService = (val: string) => {
-    setFormData({ ...formData, service: val });
+  const handleSelectService = (value: string) => {
+    setSelectedServiceLabel(serviceOptions.find(opt => opt.value === value)?.label || '');
     setDropdownOpen(false);
   };
 
-  const copyToClipboard = () => {
+  const copyEmail = () => {
     navigator.clipboard.writeText('paulina.mejoracomunicaciones@gmail.com');
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+    if (errors[name]) {
+      setErrors(prev => ({ ...prev, [name]: '' }));
+    }
+  };
+
   const validate = () => {
     const newErrors: Record<string, string> = {};
-    if (!formData.name.trim()) newErrors.name = 'El nombre es obligatorio.';
+    if (!formData.name.trim()) newErrors.name = 'El nombre es requerido.';
     if (!formData.email.trim()) {
-      newErrors.email = 'El correo electrónico es obligatorio.';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = 'El correo es requerido.';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = 'Formato de correo electrónico inválido.';
     }
     if (!formData.message.trim()) newErrors.message = 'Por favor, describe brevemente tu requerimiento.';
+    setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  // Eliminado handleSubmit AJAX para usar envío nativo HTML que soporta correctamente el proceso de activación de FormSubmit.
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!validate()) return;
+    
+    setIsSubmitting(true);
+    setSubmitError(false);
+    
+    try {
+      const response = await fetch('https://formsubmit.co/ajax/paulina.mejoracomunicaciones@gmail.com', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          Nombre: formData.name,
+          Empresa: formData.company || 'No especificada',
+          Correo: formData.email,
+          'Área de Interés': selectedServiceLabel,
+          Mensaje: formData.message,
+          _subject: 'Nuevo mensaje - Mejora Comunicaciones'
+        })
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success === "true") {
+        setSuccess(true);
+        setFormData({ name: '', company: '', email: '', message: '' });
+      } else {
+        setSubmitError(true);
+      }
+    } catch (error) {
+      setSubmitError(true);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <div className="w-full max-w-6xl mx-auto" id="contacto-seccion">
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-16 lg:gap-12 items-start">
+      <div className="grid lg:grid-cols-5 gap-16 lg:gap-8 items-start">
         
-        {/* Left Column: Typography & Info */}
-        <div className="lg:col-span-2 flex flex-col justify-center lg:sticky lg:top-32 space-y-12">
+        {/* Left Column: Contact Info */}
+        <div className="lg:col-span-2 space-y-12">
           <div>
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-brand-teal/10 text-brand-teal text-[10px] font-extrabold tracking-[0.2em] uppercase rounded-full mb-8 border border-brand-teal/20">
-              <span className="w-2 h-2 rounded-full bg-brand-teal animate-pulse"></span>
-              Disponibilidad Inmediata
-            </div>
-            <h3 className="font-heading text-5xl md:text-6xl lg:text-7xl font-extrabold text-white tracking-tight leading-[1.05]">
-              Conversemos. <span className="text-brand-teal italic font-medium">Agenda una reunión.</span>
-            </h3>
-            <p className="text-slate-400 text-lg leading-[1.75] mt-8 lg:max-w-[620px] font-light">
-              Podemos definir tu hoja de ruta y detectar oportunidades de posicionamiento, visibilidad y protección reputacional.
+            <h2 className="text-4xl md:text-5xl font-heading font-extrabold text-white mb-6 leading-tight">
+              ¿Listo para <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-teal to-brand-teal-light">elevar tu marca?</span>
+            </h2>
+            <p className="text-slate-400 text-lg leading-relaxed mb-10">
+              Transformamos la comunicación en tu ventaja competitiva. Cuéntanos sobre tus desafíos y diseñaremos una estrategia a medida.
             </p>
-          </div>
-
-          <div className="pt-8 border-t border-slate-800/50">
-            <p className="text-[10px] uppercase tracking-[0.2em] font-extrabold text-slate-500 mb-4">Contacto Directo</p>
-            <div 
-              className="group cursor-pointer inline-flex items-center gap-4 bg-slate-800/30 hover:bg-slate-800/80 border border-slate-700/50 hover:border-brand-teal/50 transition-all duration-300 p-2.5 pr-6 rounded-full" 
-              onClick={copyToClipboard}
-            >
-              <div className="w-12 h-12 bg-slate-700/50 group-hover:bg-brand-teal transition-colors duration-300 rounded-full flex items-center justify-center text-white shrink-0">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
-              </div>
-              <div className="flex flex-col overflow-hidden">
-                <span className="font-mono text-xs sm:text-sm text-white group-hover:text-brand-teal transition-colors duration-300 truncate">
-                  paulina.mejoracomunicaciones@gmail.com
-                </span>
-                <span className="text-[10px] text-slate-400 font-bold uppercase tracking-[0.15em] mt-1 transition-colors duration-300">
-                  {copied ? '¡Copiado al portapapeles!' : 'Haz clic para copiar'}
-                </span>
+            
+            <div className="space-y-6">
+              <div 
+                onClick={copyEmail}
+                className="group flex items-center gap-5 p-5 rounded-2xl bg-slate-800/50 hover:bg-slate-800 border border-slate-700/50 hover:border-brand-teal/30 transition-all cursor-pointer"
+              >
+                <div className="w-12 h-12 rounded-full bg-brand-teal/10 flex items-center justify-center text-brand-teal group-hover:scale-110 transition-transform">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+                </div>
+                <div>
+                  <p className="text-sm text-slate-500 font-medium mb-1">Escríbenos directamente</p>
+                  <p className="text-white font-medium">{copied ? '¡Correo copiado!' : 'paulina.mejoracomunicaciones@gmail.com'}</p>
+                </div>
               </div>
             </div>
           </div>
@@ -90,21 +128,45 @@ export default function ContactForm() {
         {/* Right Column: Premium Form */}
         <div className="lg:col-span-3 lg:pl-12">
           <div className="bg-slate-900/40 backdrop-blur-3xl border border-slate-800/60 p-10 md:p-14 rounded-[3rem] relative overflow-hidden">
-            <form action="https://formsubmit.co/paulina.mejoracomunicaciones@gmail.com" method="POST" className="space-y-10 relative z-10">
-              {/* Configuraciones de FormSubmit */}
-              <input type="hidden" name="_subject" value="Nuevo mensaje - Mejora Comunicaciones" />
-              <input type="hidden" name="_template" value="table" />
-              <input type="hidden" name="_next" value="https://mejora-comunicaciones.vercel.app/" />
-              <input type="hidden" name="_captcha" value="true" />
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                <div className="relative group pt-5">
+            {/* Subtle background glow */}
+            <div className="absolute top-0 right-0 w-96 h-96 bg-brand-teal/5 blur-[120px] rounded-full pointer-events-none" />
+            
+            {submitError && (
+              <div className="absolute top-4 left-1/2 -translate-x-1/2 w-[90%] bg-red-500/10 border border-red-500/30 text-red-400 px-6 py-4 rounded-2xl z-20 text-sm text-center animate-fade-in">
+                Hubo un error al enviar el mensaje. Por favor, intenta de nuevo o escríbenos directamente al correo.
+              </div>
+            )}
+            
+            {success ? (
+              <div className="absolute inset-0 bg-slate-900/95 backdrop-blur-xl z-20 flex flex-col items-center justify-center p-12 text-center animate-fade-in rounded-[3rem]">
+                <div className="w-24 h-24 bg-brand-teal/10 text-brand-teal flex items-center justify-center rounded-full mb-8 border border-brand-teal/30">
+                  <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 13l4 4L19 7" /></svg>
+                </div>
+                <h4 className="font-heading text-4xl font-extrabold text-white mb-4">
+                  Mensaje Recibido
+                </h4>
+                <p className="text-slate-400 max-w-md mx-auto text-lg leading-relaxed">
+                  Gracias por tu interés. Revisaré tus requerimientos detalladamente y me pondré en contacto contigo a la brevedad.
+                </p>
+                <button
+                  onClick={() => setSuccess(false)}
+                  className="mt-10 text-[11px] text-brand-teal font-extrabold tracking-[0.2em] uppercase hover:text-white transition-colors px-8 py-4 border border-brand-teal/30 hover:border-brand-teal rounded-full"
+                >
+                  Enviar otro mensaje
+                </button>
+              </div>
+            ) : null}
+
+            <form onSubmit={handleSubmit} className="space-y-10 relative z-10">
+              <div className="grid md:grid-cols-2 gap-10">
+                <div className="relative group">
                   <input
                     type="text"
                     id="name"
-                    name="Nombre"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
                     placeholder=" "
-                    required
                     className="block w-full bg-transparent border-0 border-b-2 border-slate-700/50 py-3 px-0 text-base text-white focus:outline-none focus:ring-0 focus:border-brand-teal transition-colors peer"
                   />
                   <label htmlFor="name" className="absolute text-xs uppercase tracking-[0.15em] font-bold text-slate-500 duration-300 transform -translate-y-7 top-7 -z-10 origin-[0] peer-focus:text-brand-teal peer-placeholder-shown:translate-y-0 peer-placeholder-shown:text-sm peer-focus:-translate-y-7 peer-focus:text-xs">
@@ -112,12 +174,14 @@ export default function ContactForm() {
                   </label>
                   {errors.name && <p className="text-[10px] text-red-400 mt-2 absolute">{errors.name}</p>}
                 </div>
-
-                <div className="relative group pt-5">
+                
+                <div className="relative group">
                   <input
                     type="text"
                     id="company"
-                    name="Empresa"
+                    name="company"
+                    value={formData.company}
+                    onChange={handleChange}
                     placeholder=" "
                     className="block w-full bg-transparent border-0 border-b-2 border-slate-700/50 py-3 px-0 text-base text-white focus:outline-none focus:ring-0 focus:border-brand-teal transition-colors peer"
                   />
@@ -131,9 +195,10 @@ export default function ContactForm() {
                 <input
                   type="email"
                   id="email"
-                  name="Email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
                   placeholder=" "
-                  required
                   className="block w-full bg-transparent border-0 border-b-2 border-slate-700/50 py-3 px-0 text-base text-white focus:outline-none focus:ring-0 focus:border-brand-teal transition-colors peer"
                 />
                 <label htmlFor="email" className="absolute text-xs uppercase tracking-[0.15em] font-bold text-slate-500 duration-300 transform -translate-y-7 top-7 -z-10 origin-[0] peer-focus:text-brand-teal peer-placeholder-shown:translate-y-0 peer-placeholder-shown:text-sm peer-focus:-translate-y-7 peer-focus:text-xs">
@@ -145,7 +210,6 @@ export default function ContactForm() {
               <div className="relative group pt-5">
                 <label className="block text-xs uppercase tracking-[0.15em] font-bold text-slate-500 mb-2">Área de Interés Principal</label>
                 <div className="relative">
-                  <input type="hidden" name="Servicio_de_Interés" value={selectedServiceLabel} />
                   <div 
                     className="w-full bg-transparent border-0 border-b-2 border-slate-700/50 py-3 px-0 text-base text-white cursor-pointer flex justify-between items-center group-hover:border-brand-teal transition-colors"
                     onClick={() => setDropdownOpen(!isDropdownOpen)}
@@ -175,10 +239,11 @@ export default function ContactForm() {
               <div className="relative group pt-5">
                 <textarea
                   id="message"
-                  name="Mensaje"
+                  name="message"
+                  value={formData.message}
+                  onChange={handleChange}
                   rows={3}
                   placeholder=" "
-                  required
                   className="block w-full bg-transparent border-0 border-b-2 border-slate-700/50 py-3 px-0 text-base text-white focus:outline-none focus:ring-0 focus:border-brand-teal transition-colors peer resize-none"
                 />
                 <label htmlFor="message" className="absolute text-xs uppercase tracking-[0.15em] font-bold text-slate-500 duration-300 transform -translate-y-7 top-7 -z-10 origin-[0] peer-focus:text-brand-teal peer-placeholder-shown:translate-y-0 peer-placeholder-shown:text-sm peer-focus:-translate-y-7 peer-focus:text-xs">
@@ -190,10 +255,21 @@ export default function ContactForm() {
               <div className="pt-6">
                 <button
                   type="submit"
-                  className="w-full bg-brand-teal hover:bg-brand-teal-light text-slate-900 font-extrabold text-[11px] uppercase tracking-[0.2em] py-5 rounded-full transition-all duration-300 shadow-[0_0_30px_rgba(16,163,151,0.2)] hover:shadow-[0_0_40px_rgba(16,163,151,0.4)] flex items-center justify-center gap-3"
+                  disabled={isSubmitting}
+                  className={`w-full font-extrabold text-[11px] uppercase tracking-[0.2em] py-5 rounded-full transition-all duration-300 flex items-center justify-center gap-3 ${
+                    isSubmitting 
+                      ? 'bg-brand-teal/50 text-slate-800 cursor-not-allowed' 
+                      : 'bg-brand-teal hover:bg-brand-teal-light text-slate-900 shadow-[0_0_30px_rgba(16,163,151,0.2)] hover:shadow-[0_0_40px_rgba(16,163,151,0.4)]'
+                  }`}
                 >
-                  Solicitar Evaluación Estratégica
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+                  {isSubmitting ? (
+                    'Enviando...'
+                  ) : (
+                    <>
+                      Solicitar Evaluación Estratégica
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+                    </>
+                  )}
                 </button>
               </div>
             </form>
