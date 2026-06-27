@@ -10,9 +10,6 @@ export default function ContactForm() {
   });
   const [copied, setCopied] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [success, setSuccess] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitError, setSubmitError] = useState(false);
   const [isDropdownOpen, setDropdownOpen] = useState(false);
 
   const serviceOptions = [
@@ -93,35 +90,6 @@ export default function ContactForm() {
         {/* Right Column: Premium Form */}
         <div className="lg:col-span-3 lg:pl-12">
           <div className="bg-slate-900/40 backdrop-blur-3xl border border-slate-800/60 p-10 md:p-14 rounded-[3rem] relative overflow-hidden">
-            {/* Subtle background glow */}
-            <div className="absolute top-0 right-0 w-96 h-96 bg-brand-teal/5 blur-[120px] rounded-full pointer-events-none" />
-            
-            {submitError && (
-              <div className="absolute top-4 left-1/2 -translate-x-1/2 w-[90%] bg-red-500/10 border border-red-500/30 text-red-400 px-6 py-4 rounded-2xl z-20 text-sm text-center">
-                Hubo un error al enviar el mensaje. Por favor, intenta enviando un correo directamente.
-              </div>
-            )}
-            
-            {success ? (
-              <div className="absolute inset-0 bg-slate-900/95 backdrop-blur-xl z-10 flex flex-col items-center justify-center p-12 text-center animate-fade-in rounded-[3rem]">
-                <div className="w-24 h-24 bg-brand-teal/10 text-brand-teal flex items-center justify-center rounded-full mb-8 border border-brand-teal/30">
-                  <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 13l4 4L19 7" /></svg>
-                </div>
-                <h4 className="font-heading text-4xl font-extrabold text-white mb-4">
-                  Mensaje Recibido
-                </h4>
-                <p className="text-slate-400 max-w-md mx-auto text-lg leading-relaxed">
-                  Gracias por tu interés. Revisaré tus requerimientos detalladamente y me pondré en contacto contigo a la brevedad.
-                </p>
-                <button
-                  onClick={() => setSuccess(false)}
-                  className="mt-10 text-[11px] text-brand-teal font-extrabold tracking-[0.2em] uppercase hover:text-white transition-colors px-8 py-4 border border-brand-teal/30 hover:border-brand-teal rounded-full"
-                >
-                  Enviar otro mensaje
-                </button>
-              </div>
-            ) : null}
-
             <form action="https://formsubmit.co/paulina.mejoracomunicaciones@gmail.com" method="POST" className="space-y-10 relative z-10">
               {/* Configuraciones de FormSubmit */}
               <input type="hidden" name="_subject" value="Nuevo mensaje - Mejora Comunicaciones" />
