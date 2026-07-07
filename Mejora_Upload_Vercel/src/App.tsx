@@ -124,7 +124,7 @@ export default function App() {
             
             <div className="flex flex-col gap-7 pt-2 pb-4">
               <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl font-extrabold leading-[1.05] tracking-tight text-brand-slate-dark text-balance">
-                La reputación ya no es solo ante personas.
+                La reputación ya no se construye solo ante las personas.
               </h1>
               
               <div className="flex items-center gap-3">
@@ -134,7 +134,7 @@ export default function App() {
               </div>
 
               <h2 className="font-heading text-3xl md:text-4xl lg:text-[42px] font-medium italic leading-[1.15] tracking-tight text-brand-teal text-balance">
-                También ante sistemas que organizan la información del mundo.
+                También ante los sistemas que organizan la información del mundo.
               </h2>
             </div>
             
