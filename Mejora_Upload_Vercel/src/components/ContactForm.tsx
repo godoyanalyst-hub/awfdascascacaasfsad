@@ -101,10 +101,6 @@ export default function ContactForm() {
         {/* Left Column: Typography & Info */}
         <div className="lg:col-span-2 flex flex-col justify-center lg:sticky lg:top-32 space-y-12">
           <div>
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-brand-teal/10 text-brand-teal text-[10px] font-extrabold tracking-[0.2em] uppercase rounded-full mb-8 border border-brand-teal/20">
-              <span className="w-2 h-2 rounded-full bg-brand-teal animate-pulse"></span>
-              Disponibilidad Inmediata
-            </div>
             <h3 className="font-heading text-5xl md:text-6xl lg:text-7xl font-extrabold text-white tracking-tight leading-[1.05]">
               Conversemos. <span className="text-brand-teal italic font-medium">Agenda una reunión.</span>
             </h3>

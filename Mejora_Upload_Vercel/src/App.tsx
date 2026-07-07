@@ -23,6 +23,7 @@ import MethodologyTabs from './components/MethodologyTabs';
 import ContactForm from './components/ContactForm';
 import Testimonials from './components/Testimonials';
 import { SERVICES, TESTIMONIALS } from './data';
+import ImagenPortada from './assets/ImagenPortadaa.jpeg';
 
 // Service icon mapping dictionary helper
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -52,25 +53,11 @@ export default function App() {
           const navHeight = 80;
           const targetPosition = element.getBoundingClientRect().top + window.pageYOffset - navHeight;
           const startPosition = window.pageYOffset;
-          const distance = targetPosition - startPosition;
-          const duration = 800; // ms
-          let start: number | null = null;
-
-          const step = (timestamp: number) => {
-            if (!start) start = timestamp;
-            const progress = timestamp - start;
-            // Easing in-out cubic
-            const easeInOutCubic = (t: number) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-            const percentage = Math.min(progress / duration, 1);
-            
-            window.scrollTo(0, startPosition + distance * easeInOutCubic(percentage));
-            
-            if (progress < duration) {
-              window.requestAnimationFrame(step);
-            }
-          };
           
-          window.requestAnimationFrame(step);
+          window.scrollTo({
+            top: targetPosition,
+            behavior: 'auto' // Instantáneo, sin animación
+          });
           
           if (mobileMenuOpen) {
             setMobileMenuOpen(false);
@@ -177,6 +164,8 @@ export default function App() {
           </div>
 
           <div className="hidden lg:flex justify-center items-center h-full relative mt-10 lg:mt-0">
+            {/* Animación original de barras comentada a petición */}
+            {/*
             <div className="flex items-center gap-5 xl:gap-6 transform transition-transform hover:scale-105 duration-500 cursor-default relative z-10">
               <div className="w-8 xl:w-10 h-40 xl:h-52 bg-brand-teal/90 rounded-full animate-wave shadow-lg shadow-brand-teal/20" />
               <div className="w-8 xl:w-10 h-64 xl:h-[320px] bg-brand-teal rounded-full animate-wave animation-delay-200 shadow-xl shadow-brand-teal/30" />
@@ -184,9 +173,21 @@ export default function App() {
               <div className="w-8 xl:w-10 h-64 xl:h-[320px] bg-brand-teal rounded-full animate-wave animation-delay-600 shadow-xl shadow-brand-teal/30" />
               <div className="w-8 xl:w-10 h-40 xl:h-52 bg-brand-teal/90 rounded-full animate-wave animation-delay-200 shadow-lg shadow-brand-teal/20" />
             </div>
+            */}
+
+            {/* Nueva imagen de portada Premium */}
+            <div className="relative w-[85%] max-w-[480px] aspect-[4/5] rounded-[3rem] overflow-hidden shadow-[0_30px_60px_rgba(16,163,151,0.25)] border-[6px] border-white/60 group z-10 transform transition-transform duration-700 hover:-translate-y-2">
+              <div className="absolute inset-0 bg-brand-teal/10 group-hover:bg-transparent transition-colors duration-700 z-10 pointer-events-none mix-blend-multiply"></div>
+              <img 
+                src={ImagenPortada} 
+                alt="Paulina Vega" 
+                className="w-full h-full object-cover object-top scale-[1.05] group-hover:scale-100 transition-transform duration-1000 ease-out" 
+              />
+              <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-brand-slate-dark/40 to-transparent z-0 pointer-events-none"></div>
+            </div>
             
-            {/* Decorative background glow behind bars */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-brand-teal/10 blur-[100px] rounded-full pointer-events-none" />
+            {/* Decorative background glow behind image */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] bg-brand-teal/15 blur-[120px] rounded-full pointer-events-none" />
           </div>
 
         </div>
@@ -267,39 +268,33 @@ export default function App() {
           */}
         </div>
 
-        {/* Core pillar indicators list (Context) */}
-        <div className="mb-20 pb-12 border-b border-slate-200/60">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-8">
-            {/* Pillar 1 */}
-            <div className="flex items-start gap-4">
-              <div className="text-brand-teal mt-0.5 shrink-0">
-                <Shield size={22} strokeWidth={2.5} />
-              </div>
-              <div>
-                <h4 className="font-heading text-[15px] font-extrabold text-brand-slate-dark mb-1.5 uppercase tracking-wide">Genera influencia escuchando el contexto</h4>
-                <p className="text-[15px] text-slate-600 leading-relaxed">Monitoreo constante de medios y redes sociales para adelantarte y preparar escenarios. Tu reputación es un intangible y tu mayor capital estratégico.</p>
-              </div>
-            </div>
-
-            {/* Pillar 2 */}
-            <div className="flex items-start gap-4">
-              <div className="text-brand-teal mt-0.5 shrink-0">
-                <Award size={22} strokeWidth={2.5} />
-              </div>
-              <div>
-                <h4 className="font-heading text-[15px] font-extrabold text-brand-slate-dark mb-1.5 uppercase tracking-wide">Storytelling y Relato Argumental</h4>
-                <p className="text-[15px] text-slate-600 leading-relaxed">Los medios buscan historias con evidencia. Construimos relatos basados en data y casos reales que aporten e impacten directamente en la vida de las personas.</p>
-              </div>
-            </div>
-
-            {/* Pillar 3 */}
-            <div className="flex items-start gap-4">
-              <div className="text-brand-teal mt-0.5 shrink-0">
-                <Users size={22} strokeWidth={2.5} />
-              </div>
-              <div>
-                <h4 className="font-heading text-[15px] font-extrabold text-brand-slate-dark mb-1.5 uppercase tracking-wide">Posicionamiento Orgánico PR</h4>
-                <p className="text-[15px] text-slate-600 leading-relaxed">Llevamos tu mensaje a medios de comunicación claves, con comunicados de prensa cuidadosamente elaborados y/o entrevistas en medios audiovisuales para acercarte a tus públicos de interés.</p>
+        {/* Texto aportes - Diseño Premium Ordenado */}
+        <div className="mb-24 pb-16 border-b border-slate-200/60 mt-4">
+          <div className="max-w-5xl">
+            {/* Lead-in / Subtitle */}
+            <h3 className="text-2xl md:text-[28px] font-heading font-medium text-brand-slate-dark leading-[1.4] mb-12">
+              Asesoría boutique de <span className="text-brand-teal font-semibold">comunicación estratégica</span> y posicionamiento reputacional.
+            </h3>
+            
+            {/* Two balanced blocks */}
+            <div className="grid md:grid-cols-2 gap-10 md:gap-16 items-start">
+              <p className="text-[17px] text-slate-600 leading-[1.8] font-light">
+                Ayudo a empresas, instituciones y líderes a construir confianza a través de relatos relevantes, gestión de prensa de alto nivel y visibilidad en los espacios donde hoy se forma la percepción pública: medios de comunicación, buscadores e inteligencia artificial.
+              </p>
+              
+              <div className="flex items-start gap-6 relative md:pl-10">
+                {/* Vertical subtle divider for desktop */}
+                <div className="hidden md:block absolute left-0 top-2 bottom-2 w-px bg-slate-200"></div>
+                
+                <div className="flex-shrink-0">
+                  <div className="flex items-center justify-center w-16 h-16 rounded-full bg-brand-teal/5 text-brand-teal font-extrabold text-2xl font-heading shadow-inner border border-brand-teal/10">
+                    20+
+                  </div>
+                </div>
+                <p className="text-[16px] text-slate-600 leading-[1.7] font-light">
+                  <strong className="text-brand-slate-dark font-semibold block mb-1">Años de experiencia</strong>
+                  asesorando organizaciones en Chile, combinando criterio periodístico, ejecución ágil y una sólida red de relacionamiento con medios nacionales.
+                </p>
               </div>
             </div>
           </div>
