@@ -23,7 +23,7 @@ import MethodologyTabs from './components/MethodologyTabs';
 import ContactForm from './components/ContactForm';
 import Testimonials from './components/Testimonials';
 import { SERVICES, TESTIMONIALS } from './data';
-import ImagenPortada from './assets/ImagenPortadaa.jpeg';
+import ImagenPortada from './assets/Fondo2.jpeg';
 
 // Service icon mapping dictionary helper
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
