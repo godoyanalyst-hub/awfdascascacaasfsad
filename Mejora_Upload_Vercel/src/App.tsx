@@ -176,7 +176,7 @@ export default function App() {
             */}
 
             {/* Nueva imagen de portada Premium */}
-            <div className="relative w-[85%] max-w-[480px] aspect-[4/5] rounded-[3rem] overflow-hidden shadow-[0_30px_60px_rgba(16,163,151,0.25)] border-[6px] border-white/60 group z-10 transform transition-transform duration-700 hover:-translate-y-2">
+            <div className="relative w-[70%] max-w-[400px] aspect-[4/5] rounded-[3rem] overflow-hidden shadow-[0_30px_60px_rgba(16,163,151,0.25)] border-[6px] border-white/60 group z-10 transform transition-transform duration-700 hover:-translate-y-2">
               <div className="absolute inset-0 bg-brand-teal/10 group-hover:bg-transparent transition-colors duration-700 z-10 pointer-events-none mix-blend-multiply"></div>
               <img 
                 src={ImagenPortada} 
